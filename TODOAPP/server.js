@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
+app.use('/public', express.static('public')); 
 
 var db; // db 를 담을 변수
 MongoClient.connect(
@@ -25,11 +26,13 @@ MongoClient.connect(
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  // res.sendFile(__dirname + '/index.html');
+  res.render('index.ejs'); 
 });
 
 app.get('/write', function (req, res) {
-  res.sendFile(__dirname + '/write.html');
+  // res.sendFile(__dirname + '/write.html'); 
+  res.render('write.ejs'); 
 });
 
 // 글을 생성하려면 -> id 를 unique 하게 부여하기 위해서
@@ -59,9 +62,6 @@ app.post('/add', function (req, res) {
         })
       }
     );
-    
-    
-
   })
   
 });
@@ -82,3 +82,15 @@ app.delete('/delete', function(req,res){
     res.status(200).send({message : '삭제 성공했습니다.'});
   })
 }); 
+
+// 상세 페이지 : req.params.id
+app.get('/detail/:id', function(req,res){
+  req.params.id = parseInt(req.params.id); 
+  db.collection('post').findOne({ _id : req.params.id }, function(err, result){
+    if(!result){
+      res.status(400).send({message: '요청한 페이지가 존재하지 않습니다.' , err}); 
+    }
+    res.render('detail.ejs', {data : result});
+  })   
+})
+
