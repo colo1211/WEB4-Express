@@ -3,6 +3,8 @@ const app = express();
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public')); 
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 var db; // db 를 담을 변수
 MongoClient.connect(
@@ -59,6 +61,7 @@ app.post('/add', function (req, res) {
           if(err) {
             return err; 
           }
+          res.redirect('/list');
         })
       }
     );
@@ -94,3 +97,23 @@ app.get('/detail/:id', function(req,res){
   })   
 })
 
+app.get('/edit/:id', function(req,res){
+  var id = parseInt(req.params.id);
+  db.collection('post').findOne({ _id : id}, function(err, result){
+    if(!result){
+      res.status(400).send({message:'해당 페이지는 DB 상에 존재하지 않습니다.'}); 
+    }
+    console.log(result); 
+    res.render('edit.ejs', {data : result}); 
+  });
+})
+
+app.put('/edit', function(req,res){
+  var id = parseInt(req.body.id); 
+  db.collection('post').updateOne({ _id : id }, {$set : {제목 : req.body.title, 날짜 : req.body.date}}, function(err, result){
+    if(!result){
+      res.status(400).send({message: '수정에 실패하였습니다.'});
+    }
+    res.redirect(`/detail/${req.body.id}`)
+  })
+});
