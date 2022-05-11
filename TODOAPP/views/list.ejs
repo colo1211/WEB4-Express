@@ -29,7 +29,7 @@
       <ul class="list-group">
         <% for(let i=0; i<posts.length; i++) {%>
         <li class="list-group-item">
-          <h4 class='detail' data-id="<%= posts[i]._id %>">할 일 제목 : <%= posts[i].제목 %> </h4>
+          <h4 class='detail' data-id="<%= posts[i]._id %>" style="cursor: pointer;">할 일 제목 : <%= posts[i].제목 %> </h4>
         <p>할 일 날짜 : <%= posts[i].날짜 %> </p>
         <button type="button" class="btn btn-danger delete" data-id="<%= posts[i]._id %>">삭제</button>  
         </li>
