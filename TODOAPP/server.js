@@ -198,3 +198,10 @@ app.get('/mypage', checkLogin, function(req,res){
   res.render('mypage.ejs', {data : req.user}); 
 });
 
+app.get('/search', function(req, res){
+  // req.query 로 검색 query 를 설정 
+  console.log('검색 데이터', req.query.value);
+  db.collection('post').find({제목 : req.query.value}).toArray(function(err, result){
+    res.render('search.ejs', {posts : result})
+  })
+})
