@@ -22,7 +22,7 @@
     <%- include('nav.html')  %>
 
     <div class="container input-group mt-4 mb-2">
-      <input class="form-control" id="search-input"/>
+      <input class="form-control" id="search-input" placeholder="제목을 검색해보세요"/>
       <button class="input-group-append btn btn-danger" id="search">검색</button>
     </div>
 
@@ -43,7 +43,7 @@
     </div>
     <script>
       $('#search').click(function(e){
-        var text = $('#search-input').val(); 
+        var text = $('#search-input').val(); // 사용자가 input 에 입력한 값
         window.location.replace(`/search?value=${text}`); 
       })
 

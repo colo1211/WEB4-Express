@@ -198,10 +198,14 @@ app.get('/mypage', checkLogin, function(req,res){
   res.render('mypage.ejs', {data : req.user}); 
 });
 
+
+// 검색을 위한 API
 app.get('/search', function(req, res){
   // req.query 로 검색 query 를 설정 
-  console.log('검색 데이터', req.query.value);
+  console.log('검색 데이터', req.query.value); // 검색한 데이터가 출력
+
+  // 딱 검색한 데이터에 맞는 것만 찾아줌
   db.collection('post').find({제목 : req.query.value}).toArray(function(err, result){
     res.render('search.ejs', {posts : result})
-  })
-})
+  });
+});
